@@ -27,6 +27,7 @@ __pycache__/
 
 # Slurm 日志
 slurm-*.out
+local/slurm/logs/
 
 # 编辑器 / 系统
 .DS_Store
