@@ -1,0 +1,34 @@
+# 下载的数据集与预训练权重（体积大，从外部获取，不进 git）
+braintreebank_data/
+pretrained_weights/
+semantics/
+
+# huggingface_hub 下载到仓库根目录的残留：snapshot_download 会把整个 HF repo
+# （含 README.md / .gitattributes / 配置副本）铺到 local_dir。下权重时务必指定
+# local_dir=pretrained_weights/，否则会覆盖 upstream 的 README.md。
+/.gitattributes
+/pt_custom_model.yaml
+
+# 预处理 / 训练生成物（脚本可重跑）
+saved_examples/
+saved_data_splits/
+cached_data_arrays/
+outputs/
+.cache/
+
+# 本机路径配置（每台机器不同，见 local/env.sh.example）
+local/env.sh
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Slurm 日志
+slurm-*.out
+
+# 编辑器 / 系统
+.DS_Store
+.idea/
+.vscode/
