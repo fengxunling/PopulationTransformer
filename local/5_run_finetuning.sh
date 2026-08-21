@@ -14,8 +14,8 @@ python3 run_train.py \
 +exp=multi_elec_feature_extract \
 ++exp.runner.results_dir=${REPO_DIR}/outputs/${SUBJECT}_${TASK}_top${N}_${NAME} \
 ++exp.runner.device=cuda \
-+task=pt_supervised_task \
-+criterion=pt_supervised_criterion \
++task=pt_feature_extract_coords \
++criterion=pt_feature_extract_coords_criterion \
 +preprocessor=empty_preprocessor \
 +data=pt_supervised_task_coords \
 ++data.data_path=${REPO_DIR}/saved_examples/${SUBJECT}_${TASK}_cr \
