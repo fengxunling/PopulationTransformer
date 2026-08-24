@@ -44,6 +44,8 @@ def main():
     p.add_argument("--repo-dir", required=True)
     p.add_argument("--split", default="within_session", choices=list(SPLIT_DIR_NAME))
     p.add_argument("--weights", default="popt_brainbert_stft")
+    p.add_argument("--win-tag", default="d-2.25_t5.0",
+                   help="只汇总这个窗口配置的结果")
     p.add_argument("--out-root", default=None)
     p.add_argument("--model-name", default="PopulationTransformer (reproduction)")
     p.add_argument("--author", default="")
@@ -57,13 +59,14 @@ def main():
 
     # outputs/np_<split>_<task>_sub<S>_trial<T>_fold<k>_<weights>/results.json
     pattern = os.path.join(args.repo_dir, "outputs",
-                           "np_%s_*_fold*_%s" % (args.split, args.weights),
+                           "np_%s_*_%s_fold*_%s" % (args.split, args.win_tag, args.weights),
                            "results.json")
     per_task = {}   # task -> {session_key -> {fold -> (acc, auc)}}
     for path in sorted(glob.glob(pattern)):
         name = os.path.basename(os.path.dirname(path))
         body = name[len("np_%s_" % args.split):-len("_%s" % args.weights)]
         head, fold_part = body.rsplit("_fold", 1)
+        head = head[:-len("_%s" % args.win_tag)]   # 去掉窗口标记
         task, sub_part, trial_part = head.rsplit("_", 2)
         session = "btbank%s_%s" % (sub_part[len("sub"):], trial_part[len("trial"):])
         with open(path) as fd:

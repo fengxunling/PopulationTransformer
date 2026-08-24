@@ -4,9 +4,25 @@
 #
 #   SUBJECT_ID=1 TRIAL_ID=1 ./local/neuroprobe_popt/1_write_words_features.sh
 #   ./local/neuroprobe_popt/1_write_words_features.sh --all      # 12 个 session 全跑
+#
+# 内存要给够：全词一次性加载是 [n_elec, n_words, 2048] 的 float64，sub_1 约 15GB，
+# 再叠上整段 trial 的原始数据和 laplacian 的邻居数组。salloc -c 8 (~48GB) 会 OOM。
+#   salloc -p rtxp6000bws --gres=gpu:1 -c 32 --mem=400G
 source "$(dirname "$0")/../_common.sh"
 
-FEAT_ROOT="${REPO_DIR}/saved_examples/np_words"
+# 窗口：BrainBERT 只取频谱中间 10 帧（preprocessors/multi_elec_spec_pretrained.py:61），
+# 所以「模型实际读到的」是 onset+DELTA+DURATION/2 前后各约 122ms。
+# DURATION 保持 5.0 匹配预训练（conf/data/pretraining_subject_data_template.yaml:11），
+# 靠 DELTA 把那 10 帧挪进 leaderboard 规定的 [0, 1s] 里：
+#   -2.25 -> 中心 +0.25s, 覆盖 0.13~0.37s（推荐，落在听觉响应上）
+#   -2.0  -> 中心 +0.50s, 覆盖 0.38~0.62s
+#   -2.5  -> 中心 onset，跨过 onset，不合规
+WIN_DELTA="${WIN_DELTA:--2.25}"
+WIN_DURATION="${WIN_DURATION:-5.0}"
+# 输出目录带上窗口标记，不同窗口的特征不会互相覆盖
+WIN_TAG="${WIN_TAG:-d${WIN_DELTA}_t${WIN_DURATION}}"
+
+FEAT_ROOT="${REPO_DIR}/saved_examples/np_words_${WIN_TAG}"
 ELEC_JSON="${REPO_DIR}/local/neuroprobe_popt/electrodes_lite_laplacian.json"
 
 if [ ! -f "${ELEC_JSON}" ]; then
@@ -41,7 +57,11 @@ for s in ${SESSIONS}; do
     printf '{"%s": ["%s"]}' "${SUBJECT}" "${TRIAL}" > "${RUNS_JSON}"
 
     echo "=== 写 ${SUBJECT} ${TRIAL} 的全词特征 -> ${OUT_DIR}"
+    # --config-path 必须显式给：hydra 的 config_path 是相对「调用 main() 的那个
+    # 文件」算的，入口挪到 local/neuroprobe_popt/ 之后 upstream 写的 "../conf"
+    # 会指到 local/conf。
     python3 -m local.neuroprobe_popt.write_words_features \
+        --config-path "${REPO_DIR}/conf" \
         +data_prep=pretrain_multi_subj_multi_chan_template \
         ++data_prep.task_name=all_words \
         ++data_prep.brain_runs="${RUNS_JSON}" \
@@ -53,8 +73,8 @@ for s in ${SESSIONS}; do
         ++data.cached_transcript_aligns="${REPO_DIR}/semantics/saved_aligns" \
         ++data.raw_brain_data_dir="${BRAINTREEBANK_DIR}/" \
         ++data.movie_transcripts_dir="${BRAINTREEBANK_DIR}/transcripts" \
-        ++data.delta=0.0 \
-        ++data.duration=1.0
+        ++data.delta="${WIN_DELTA}" \
+        ++data.duration="${WIN_DURATION}"
 
     rm -f "${RUNS_JSON}"
 done

@@ -40,7 +40,9 @@ def parse_args():
     p.add_argument("--braintreebank-root", required=True,
                    help="neuroprobe 用的数据根目录（h5 在根下、metadata 不嵌套的那份）")
     p.add_argument("--features-root", default=None,
-                   help="全词特征根目录，默认 <repo>/saved_examples/np_words")
+                   help="全词特征根目录，默认 <repo>/saved_examples/np_words_<WIN_TAG>")
+    p.add_argument("--win-tag", default="d-2.25_t5.0",
+                   help="窗口标记，要和 1_write_words_features.sh 的 WIN_TAG 一致")
     p.add_argument("--subject-id", type=int, default=1)
     p.add_argument("--trial-id", type=int, default=1, help="测试用的 trial")
     p.add_argument("--eval-name", default="volume", help="neuroprobe 任务名")
@@ -108,7 +110,8 @@ def main():
     args = parse_args()
     repo = args.repo_dir
     os.environ["ROOT_DIR_BRAINTREEBANK"] = args.braintreebank_root
-    features_root = args.features_root or os.path.join(repo, "saved_examples", "np_words")
+    features_root = args.features_root or os.path.join(
+        repo, "saved_examples", "np_words_%s" % args.win_tag)
 
     if args.eval_name in EVAL_NEEDS_NONVERBAL:
         sys.exit("%s 的负样本是非语音时间窗，不在全词特征里。"

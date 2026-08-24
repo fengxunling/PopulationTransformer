@@ -16,6 +16,7 @@ word_head_pos word_part_speech word_length global_flow local_flow \
 frame_brightness face_num}"
 SESSIONS="${SESSIONS:-1:1 1:2 2:0 2:4 3:0 3:1 4:0 4:1 7:0 7:1 10:0 10:1}"
 SPLIT="${SPLIT:-within_session}"
+WIN_TAG="${WIN_TAG:-d-2.25_t5.0}"   # 要和提特征时的 WIN_TAG 一致
 WEIGHTS="${WEIGHTS:-popt_brainbert_stft}"
 
 # label2idx 用 set() 迭代顺序（datasets/pt_supervised_task_coords.py:69），
@@ -26,7 +27,10 @@ FAILED=""
 for task in ${TASKS}; do
   for s in ${SESSIONS}; do
     SID="${s%%:*}"; TID="${s##*:}"
-    OUT_NAME="np_${SPLIT}_${task}_sub${SID}_trial${TID}"
+    # WIN_TAG 必须进名字：saved_examples / saved_data_splits / outputs 三处都按
+    # OUT_NAME 命名，不带窗口标记的话不同窗口配置会共用同一个 outputs 目录，
+    # 下面「已有 results.json 就跳过」的逻辑会静默拿旧窗口的结果冒充新的。
+    OUT_NAME="np_${SPLIT}_${task}_sub${SID}_trial${TID}_${WIN_TAG}"
 
     echo ""
     echo "############ ${task}  sub_${SID} trial${TID}  (${SPLIT})"
@@ -34,7 +38,8 @@ for task in ${TASKS}; do
             --repo-dir "${REPO_DIR}" \
             --braintreebank-root "${NEUROPROBE_ROOT_DIR}" \
             --subject-id "${SID}" --trial-id "${TID}" \
-            --eval-name "${task}" --split "${SPLIT}" --out-name "${OUT_NAME}"; then
+            --eval-name "${task}" --split "${SPLIT}" --out-name "${OUT_NAME}" \
+            --win-tag "${WIN_TAG}"; then
         echo "!!! build 失败，跳过 ${OUT_NAME}"
         FAILED="${FAILED} ${OUT_NAME}:build"
         continue
