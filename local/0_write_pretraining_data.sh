@@ -2,10 +2,13 @@
 # 写预训练数据（NSP）。对应 upstream 的 0_write_pretraining_data.sh
 source "$(dirname "$0")/_common.sh"
 
-# XXX 这里用的是原始数据盘，而 3_write_finetuning_data.sh 用的是组装好的
-# ${BRAINTREEBANK_DIR}。原始盘的 h5 是嵌套一层的（sub_1_trial000.h5/sub_1_trial000.h5），
-# 且没有 transcripts/，预训练流程跑通前先确认这个路径对不对。
-BT_DIR="${BRAINTREEBANK_RAW_DIR}"
+# 必须用组装好的 ${BRAINTREEBANK_DIR}，不能用原始盘：
+#   - 原始盘没有 electrode_labels/，data/h5_data.py:29-30 的 glob 会匹配到 0 个，
+#     assert len(electrode_labels_file)==1 直接 AssertionError
+#   - 原始盘的 h5 还嵌套一层（sub_1_trial000.h5/sub_1_trial000.h5）
+# braintreebank_data/ 里 metadata 是实体文件、all_subject_data/ 下的 h5 是指向
+# 原始盘的符号链接，两个问题都绕开了。3_write_finetuning_data.sh 用的也是它。
+BT_DIR="${BRAINTREEBANK_DIR}"
 
 python3 -m data.write_nsp_pretraining_data \
 +preprocessor=multi_elec_spec_pretrained \

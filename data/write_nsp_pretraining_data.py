@@ -115,6 +115,8 @@ def main(cfg: DictConfig) -> None:
 
     all_ordered_electrodes = {}
 
+    print(f'==brain_runs={brain_runs}')
+
     for subject in brain_runs:
         data_cfg_template = cfg.data.copy()
         log.info(f'Writing features for {subject}')

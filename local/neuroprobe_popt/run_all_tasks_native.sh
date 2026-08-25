@@ -50,7 +50,9 @@ for s in ${SESSIONS}; do
         RES_DIR="${REPO_DIR}/outputs/${OUT_NAME}_fold${k}_${WEIGHTS}"
         [ -f "${RES_DIR}/results.json" ] && { echo "=== fold ${k} 已有结果，跳过"; continue; }
         echo "=== fold ${k}/${N_FOLDS}"
+        # hydra 默认按 outputs/<日期>/<时:分:秒> 建目录，多个作业并发时同一秒起步会撞车
         python3 run_train.py \
+            hydra.run.dir="${REPO_DIR}/outputs/hydra/${SLURM_JOB_ID:-local}/${OUT_NAME}_fold${k}" \
             +exp=multi_elec_feature_extract \
             ++exp.runner.results_dir="${RES_DIR}" \
             ++exp.runner.device=cuda \

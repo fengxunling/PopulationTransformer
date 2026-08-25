@@ -2,9 +2,9 @@
 #SBATCH --job-name=np_native
 #SBATCH --partition=rtxp6000bws
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=32
-#SBATCH --mem=400G
-#SBATCH --output=%x_%j.log
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=48G
+#SBATCH --output=logs/%x_%j.log
 source /HWFS/yuezhifeng_lab/intern08/miniforge3/etc/profile.d/conda.sh
 conda activate wenxin
 cd /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer

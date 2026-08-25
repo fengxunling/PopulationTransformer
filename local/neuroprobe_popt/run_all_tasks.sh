@@ -53,7 +53,9 @@ for task in ${TASKS}; do
             continue
         fi
         echo "=== fold ${k}/${N_FOLDS}"
+        # hydra 默认按 outputs/<日期>/<时:分:秒> 建目录，多作业并发同一秒起步会撞车
         if ! python3 run_train.py \
+                hydra.run.dir="${REPO_DIR}/outputs/hydra/${SLURM_JOB_ID:-local}/${OUT_NAME}_fold${k}" \
                 +exp=multi_elec_feature_extract \
                 ++exp.runner.results_dir="${RES_DIR}" \
                 ++exp.runner.device=cuda \
