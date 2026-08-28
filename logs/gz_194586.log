@@ -1,0 +1,45 @@
+=== 全局 z-score 提特征 sub_1 trial001 -> /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/saved_examples/np_words_gz_d-2.25_t5.0/sub_1_trial001
+[2026-08-25 09:50:02,145][data.write_multi_subject_multi_channel][INFO] - Writing data to disk
+[2026-08-25 09:50:02,146][data.write_multi_subject_multi_channel][INFO] - data_prep:
+  name: pretrain_multi_subj_multi_chan
+  brain_runs: /tmp/tmp.j7CiZcII8V
+  electrodes: /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/local/neuroprobe_popt/electrodes_lite_laplacian.json
+  separation_interval: 0.2
+  task_name: all_words
+  output_directory: /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/saved_examples/np_words_gz_d-2.25_t5.0/sub_1_trial001
+preprocessor:
+  name: multi_elec_spec_pretrained
+  spec_name: stft
+  freq_channel_cutoff: 40
+  nperseg: 400
+  noverlap: 350
+  normalizing: zscore
+  upstream_ckpt: /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/pretrained_weights/stft_large_pretrained.pth
+data:
+  name: ???
+  high_gamma: false
+  samp_frequency: 2048
+  raw_brain_data_dir: /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/braintreebank_data/
+  subject: ???
+  electrodes: ???
+  brain_runs: ???
+  rereference: laplacian
+  normalization: false
+  despike: false
+  delta: -2.25
+  duration: 5.0
+  interval_duration: 1.0
+  words: []
+  cached_transcript_aligns: /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/semantics/saved_aligns
+  movie_transcripts_dir: /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/braintreebank_data/transcripts
+
+[2026-08-25 09:50:02,146][data.write_multi_subject_multi_channel][INFO] - Working directory /HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer
+/HWFS/yuezhifeng_lab/intern08/bci_motor/reference_repo/PopulationTransformer/models/masked_tf_model.py:38: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+  self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=self.cfg.encoder_num_layers)
+Default encoding
+[2026-08-25 09:50:03,989][data.write_multi_subject_multi_channel][INFO] - Writing features for sub_1
+[2026-08-25 09:50:03,989][data.write_multi_subject_multi_channel][INFO] - ['T1bIc2', 'T1bIc3', 'T1bIc4', 'T1bIc5', 'T1bIc6', 'T1bIc7', 'T1cIf11', 'T1cIf12', 'T1cIf13', 'T1cIf14', 'T1cIf15', 'T1aIb2', 'T1aIb3', 'T1aIb4', 'T1aIb5', 'T1aIb6', 'T1aIb7', 'T1cIf2', 'T1cIf3', 'T1cIf4', 'T1cIf5', 'T1cIf6', 'T1cIf7', 'T2bHa8', 'T2bHa9', 'T2bHa10', 'T2bHa11', 'T2bHa12', 'T2bHa13', 'T3bOT9', 'F3cId2', 'F3cId3', 'F3cId4', 'F3cId5', 'F3cId6', 'F3cId7', 'F3cId8', 'F3cId9', 'T2c5', 'T2c6', 'T2c7', 'F3bIaOFb2', 'F3bIaOFb3', 'F3bIaOFb4', 'F3bIaOFb5', 'F3bIaOFb6', 'F3bIaOFb7', 'F3bIaOFb8', 'F3bIaOFb9', 'F3bIaOFb10', 'F3bIaOFb11', 'F3bIaOFb12', 'F3bIaOFb13', 'F3bIaOFb14', 'F3bIaOFb15', 'T2d2', 'T2d3', 'T2d4', 'T2d5', 'F3aOFa8', 'F3aOFa9', 'F3aOFa10', 'F3aOFa11', 'F3aOFa12', 'F3aOFa13', 'F3aOFa14', 'F3aOFa15', 'F3aOFa3', 'T3bOT2', 'T3bOT3', 'T3bOT4', 'T3bOT5', 'T2bHa4', 'F3dIe2', 'F3dIe3', 'F3dIe4', 'F3dIe5', 'F3dIe6', 'F3dIe7', 'F3dIe8', 'F3dIe9', 'T2aA2', 'T2aA3', 'T2aA4', 'T2aA5', 'T2aA6', 'T2aA7', 'T2aA8']
+[2026-08-25 09:50:03,989][data.write_multi_subject_multi_channel][INFO] - ['trial001']
+[2026-08-25 09:50:03,994][data.write_multi_subject_multi_channel][INFO] - Writing features for trial001
+[2026-08-25 09:50:03,994][data.write_multi_subject_multi_channel][INFO] - Obtaining brain data and labels trial001
+[2026-08-25T09:50:15.804] error: *** JOB 194586 ON RTXP6000BWS1 CANCELLED AT 2026-08-25T09:50:15 DUE to SIGNAL Terminated ***

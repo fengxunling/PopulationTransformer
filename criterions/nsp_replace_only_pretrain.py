@@ -22,6 +22,8 @@ class NSPReplaceOnlyPretrainCriterion(BaseCriterion):
         replace_label = batch["replace_label"]
         position = (coords, seq_id)
         output, (cls_output, token_cls_output) = model.forward(masked_input, pad_mask, position)
+        # cls_outpput: [batch, 1], 这两段是否是随机拼的
+        # token_cls_output: [batch, len-1, 1]，每个电极是不是被替换的
 
         replace_label = (replace_label).type(torch.FloatTensor).to(device)
         replace_label = replace_label[:,1:]
@@ -39,7 +41,7 @@ class NSPReplaceOnlyPretrainCriterion(BaseCriterion):
         labels = torch.FloatTensor(batch["labels"]).to(device)
         cls_loss = self.bce_loss(cls_output.squeeze(), labels)
 
-        #loss = cls_loss
+        #loss = cls_loss 这里是正负样本的二分类预测，依次来构建loss反向传播
         loss = cls_loss + replace_loss
 
         logging_output = {"loss": loss.item(), 

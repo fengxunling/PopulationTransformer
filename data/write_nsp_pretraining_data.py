@@ -34,7 +34,7 @@ def get_pretraining_data_and_labels(subject_data, separation_interval, cfg):
 
     max_n_examples = float('inf')
     if 'max_n_examples' in cfg.data_prep:
-       max_n_examples = int(cfg.data_prep.max_n_examples )
+       max_n_examples = int(cfg.data_prep.max_n_examples)
 
     labels, seeg_exs = [], []
     idx = 0
@@ -86,6 +86,7 @@ def write_metadata(subject, localization_df, ordered_electrodes, output_path):
     localization_root = os.path.join(output_path, 'localization')
     Path(localization_root).mkdir(parents=True, exist_ok=True)
     localization_df_path = os.path.join(localization_root, f'{subject}.csv')
+    # print(f'==localization_df_path={localization_df_path}')
     localization_df.to_csv(localization_df_path)
 
 def get_subject_data(data_cfg_template, task_name):

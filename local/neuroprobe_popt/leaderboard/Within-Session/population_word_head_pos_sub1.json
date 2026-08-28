@@ -1,0 +1,32 @@
+{
+  "model_name": "PopulationTransformer (reproduction)",
+  "description": "PopT (BrainBERT STFT) on Neuroprobe official splits",
+  "author": "",
+  "organization": "",
+  "organization_url": "",
+  "timestamp": 0,
+  "evaluation_results": {
+    "btbankal1_": {
+      "population": {
+        "one_second_after_onset": {
+          "time_bin_start": 0.0,
+          "time_bin_end": 1.0,
+          "folds": [
+            {
+              "train_accuracy": -1.0,
+              "train_roc_auc": -1.0,
+              "test_accuracy": 0.48792270531400966,
+              "test_roc_auc": 0.4835465645647048
+            },
+            {
+              "train_accuracy": -1.0,
+              "train_roc_auc": -1.0,
+              "test_accuracy": 0.49278846153846156,
+              "test_roc_auc": 0.44750512842737855
+            }
+          ]
+        }
+      }
+    }
+  }
+}
